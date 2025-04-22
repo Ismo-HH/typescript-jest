@@ -24,7 +24,7 @@ test('Joulukuun viimeinen', () => {
     assert.equal(result.toLowerCase(), 'sunnuntai 31. joulukuuta 2023');
 });
 
-test('Tammikuun 15. päivä', () => {
+test('Tammikuun 15. päivä 2030', () => {
     let result = finnishDateString(tammikuu2030);
     assert.equal(result.toLowerCase(), 'tiistai 15. tammikuuta 2030');
 });
