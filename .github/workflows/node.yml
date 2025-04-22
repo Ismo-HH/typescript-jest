@@ -34,7 +34,8 @@ jobs:
       run: mkdir -p reports
     - name: Run tests
       id: jest-tests
-      run: npm test > test-results.txt
+      run: |
+        npm test > test-results.txt
         echo "TESTS_RESULTS=$(cat test-results.txt)" >> $GITHUB_ENV
     - name: Publish Test Report
       uses: dorny/test-reporter@v1
