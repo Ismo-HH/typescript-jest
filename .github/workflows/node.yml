@@ -33,11 +33,13 @@ jobs:
     - name: Create report directory
       run: mkdir -p reports
     - name: Run tests
-      run: npm test
+      id: jest-tests
+      run: npm test > test-results.txt
+        echo "TESTS_RESULTS=$(cat test-results.txt)" >> $GITHUB_ENV
     - name: Publish Test Report
       uses: dorny/test-reporter@v1
       with:
-        name: Jest Tests
+        name: jest-tests
         path: reports/jest-junit.xml
         reporter: jest-junit
     - name: Upload test results
@@ -49,16 +51,18 @@ jobs:
       run: |
         runid=${{ github.run_id }}
         SUM=$((runid))
-        echo "Summa on $SUM"
+        echo "runid on $SUM"
     - name: autograde-2
       run: |
         secret=${{ secrets.GH_ACTIONS_EVALUATION }}
         SUM=$((secret))
-        echo "Summa on $SUM"
+        echo "secret on $SUM"
     - name: run autograding tests
       uses: classroom-resources/autograding-grading-reporter@v1
       with:
-        runners: autograde-1, autograde-2
+        runners: ${{ env.TESTS_RESULTS }}
+      env:
+        TESTS_RESULTS: ${{ env.TESTS_RESULTS }}
 
 #      run: |
 #        runid=${{ github.run_id }}
