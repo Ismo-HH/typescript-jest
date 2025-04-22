@@ -48,7 +48,7 @@ jobs:
     - name: run autograding tests
       uses: classroom-resources/autograding-grading-reporter@v1
       with:
-        runners: Jest Tests
+        runners: Jest Tests, Upload test results
 
 #      run: |
 #        runid=${{ github.run_id }}
