@@ -43,5 +43,5 @@ jobs:
     - name: Upload test results
       uses: actions/upload-artifact@v4
       with:
-        name: test-results-${{ github.run_id }}
+        name: test-results-${{ github.run_id }}-npm-${{ matrix.node-version }}
         path: reports/jest-junit.xml
