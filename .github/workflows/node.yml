@@ -27,7 +27,7 @@ jobs:
       - name: Asenna riippuvuudet
         run: npm install
       - name: Käännä TypeScript
-        run: npm tsc
+        run: npx tsc
       - name: Lataa build-artifakti
         uses: actions/upload-artifact@v4
         with:
