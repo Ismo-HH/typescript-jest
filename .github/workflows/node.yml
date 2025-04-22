@@ -38,7 +38,7 @@ jobs:
     - name: Publish Test Report
       uses: dorny/test-reporter@v1
       with:
-        name: Jest Tests
+        name: jest-tests
         path: jest-junit.xml
         reporter: jest-junit
     - name: Upload test results
