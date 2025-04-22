@@ -27,12 +27,12 @@ jobs:
       - name: Asenna riippuvuudet
         run: npm install
       - name: Käännä TypeScript
-        run: npm run build
+        run: npm tsc
       - name: Lataa build-artifakti
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact
-          path: dist/
+          path: build/
 
   test:
     runs-on: ubuntu-latest
@@ -52,7 +52,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifact
-          path: dist/
+          path: build/
       - name: Run tests
         run: npm test
       - name: Luo raporttihakemisto
