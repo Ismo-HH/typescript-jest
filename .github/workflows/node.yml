@@ -48,13 +48,17 @@ jobs:
     - name: autograde-1
       run: |
         runid=${{ github.run_id }}
+        SUM=$((runid))
+        echo "Summa on $SUM"
+    - name: autograde-2
+      run: |
         secret=${{ secrets.GH_ACTIONS_EVALUATION }}
-        SUM=$((runid + secret))
+        SUM=$((secret))
         echo "Summa on $SUM"
     - name: run autograding tests
       uses: classroom-resources/autograding-grading-reporter@v1
       with:
-        runners: autograde-1
+        runners: autograde-1, autograde-2
 
 #      run: |
 #        runid=${{ github.run_id }}
