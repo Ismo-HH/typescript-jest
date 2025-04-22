@@ -38,33 +38,11 @@ jobs:
     - name: Publish Test Report
       uses: dorny/test-reporter@v1
       with:
-        name: jest-tests
-        path: reports/jest-junit.xml
+        name: Jest Tests
+        path: jest-junit.xml
         reporter: jest-junit
     - name: Upload test results
       uses: actions/upload-artifact@v4
       with:
         name: test-results-${{ github.run_id }}-npm-${{ matrix.node-version }}
         path: reports/jest-junit.xml
-    - name: autograde-1
-      run: |
-        runid=${{ github.run_id }}
-        SUM=$((runid))
-        echo "runid on $SUM"
-    - name: autograde-2
-      run: |
-        secret=${{ secrets.GH_ACTIONS_EVALUATION }}
-        SUM=$((secret))
-        echo "secret on $SUM"
-    - name: run autograding tests
-      uses: classroom-resources/autograding-grading-reporter@v1
-      with:
-        runners: ${{ env.TESTS_RESULTS }}
-      env:
-        TESTS_RESULTS: ${{ env.TESTS_RESULTS }}
-
-#      run: |
-#        runid=${{ github.run_id }}
-#        secret=${{ secrets.GH_ACTIONS_EVALUATION }}
-#        SUM=$((runid + secret))
-#        echo "Summa on $SUM"
