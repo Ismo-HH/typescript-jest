@@ -45,6 +45,9 @@ jobs:
     name: Report
     if: always()
     steps:
+    - name: list artifactit
+      run: ls -la reports
+
     - name: Download test results
       uses: actions/download-artifact@v4
       with:
