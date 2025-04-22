@@ -34,13 +34,7 @@ jobs:
       run: mkdir -p reports
     - name: Run tests
       id: jest-tests
-      run: |
-        npm test -- --reporters=default --reporters=jest-junit
-        if reports/jest-junit.xml; then
-          echo "::set-output name=TESTS_RESULTS::tests-found"
-        else
-          echo "::set-output name=TESTS_RESULTS::no-tests"
-        fi
+      run: npm test -- --reporters=default --reporters=jest-junit
     - name: Publish Test Report
       uses: dorny/test-reporter@v1
       with:
