@@ -16,8 +16,10 @@ const monthNames: readonly string[] = [
  * @returns the formatted string, in Finnish
  */
 export function finnishDateString(date: Date): string {
-    const dayName = dayNames[date.getDay() - 1];
-    const monthName = monthNames[date.getMonth() - 1];
+    const dayName = date.getDay() > 0   
+        ? dayNames[date.getDay() - 1]
+        : dayNames[6];
+    const monthName = monthNames[date.getMonth()];
 
     const day = date.getDate();
     const year = date.getFullYear();
