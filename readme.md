@@ -101,7 +101,7 @@ Yllä [Jest-komennolle](https://jestjs.io/docs/cli) annetaan kaksi parametria, j
 💡 *Älä muuta testien käynnistyskomentoa. Mikäli testit eivät mene läpi, kiinnitä erityisesti huomiota saamasi virheraportin **Message**-kohtiin.*
 
 
-## Osa 1: Omien testien kirjoittaminen (2p)
+## Osa 1: Omien testien kirjoittaminen
 
 Tehtävän ensimmäisessä osassa sinun tulee kirjoittaa yksikkötestit [`dateFormatter.ts`-tiedostossa](./src/dateFormatter.ts) sijaitsevalle `finnishDateString`-funktiolle. Funktion on tarkoitus muotoilla sille annettu `Date`-olion suomenkieliseksi merkkijonoksi ja palauttaa esimerkiksi teksti `'maanantai 1. tammikuuta 2024'`.
 
@@ -120,95 +120,10 @@ Test Suites: 1 failed, 1 total
 Tests:       4 failed, 4 total
 ```
 
+## Osa 2: Automatisoidun työnkulun toteuttaminen
 
-## Osa 2: Funktiossa olevien virheiden korjaaminen (3p)
-
-Tehtävän toisessa osassa sinun tulee muokata annettua koodia siten, että funktio palauttaa oikeanlaiset merkkijonot ja läpäisee kirjoittamasi testit. Palautetun merkkijonon tulee olla välimerkkejä myöten täsmälleen samassa muodossa kuin tehtävänannossa, eli esim. `'maanantai 1. tammikuuta 2024'` tai `'sunnuntai 31. joulukuuta 2023'`.
-
-Ratkaisusi testataan GitHub classroom -palvelussa **kirjoittamiesi testien lisäksi** myös valmiilla testeillä. Mikäli korjattu koodi läpäisee omat testisi mutta ei näitä valmiita testejä, kiinnitä GitHub actions -välilehdellä erityistä huomiota seuraavien testien tuloksiin:
-
-```
-PASS  allBugsNeedToBeFixed.test.ts
-  Verify that the function has been fixed properly
-    √ formats Monday January 1st 2024 correctly
-    √ formats Sunday December 31st 2023 correctly
-    √ formats months correctly
-    √ formats days correctly
-```
-
-💡 Automaattisen arvioinnin vuoksi et saa muuttaa `dateFormatter.ts`-tiedoston etkä sieltä julkaistavan `finnishDateString`-funktion nimeä tai parametreja.
-
-
-## Vinkit ohjelmalogiikan korjaamiseksi
-
-Ohjelmalogiikan korjaamiseksi on ensiarvoisen tärkeää tietää, miten siinä käytetyt yksittäiset osat toimivat. Annetussa koodissa olevat virheet johtuvat kenties virheellisistä olettamuksista esimerkiksi yksittäisten numeroarvojen merkityksessä viikonpäivien ja kuukausien numeroinnin yhteydessä.
-
-Tutustu siis JavaScriptin `Date`-luokan dokumentaatioon esimerkiksi [Mozillan mdn web docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) -sivustolla. Siellä kannattaa lukea erityisesti kohdat [getDay()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getDay) sekä [getMonth()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getMonth).
-
-Voit kysellä lisää vinkkejä kurssin keskustelukanavalla.
-
-
-## 🚀 Ohjelman aikavyöhykkeet 🕚 vs. 🕐
-
-**Tehtävän tavoitteena ei ole ratkoa mahdollisia aikavyöhykkeisiin liittyviä ongelmia, eivätkä etsittävät bugit liity aikavyöhykkeisiin.**
-
-Aikavyöhykkeisiin ja kesä- sekä talviaikaan liittyvien mahdollisten ongelmien välttämiseksi on kuitenkin hyvä tiedostaa, että annetussa koodissa esiintyvät metodit kuten `date.getDate()` ja `date.getFullYear()` saattavat palauttaa samalle ajanhetkelle eri arvoja käyttöjärjestelmän aikavyöhykkeestä riippuen. GitHub classroom -testit suoritetaan eri aikavyöhykkeellä kuin millä kirjoitat koodisi, joten sekaannuksia ei voida poissulkea.
-
-Esimerkkinä voidaan käsitellä seuraavaa konkreettista tilannetta, jossa samaa ajanhetkeä käytettään kahdella eri aikavyöhykkeellä - ensin Suomessa, sitten USA:n itärannikolla:
-
-```ts
-// 1.1.2025. `new Date` käyttää UTC-aikavyöhykettä:
-let date = new Date('2025-01-01');
-
-// Suomessa paikallinen aika on UTC:tä edellä:
-process.env.TZ = 'Europe/Helsinki';
-
-console.log(date.getDate());        // 1
-console.log(date.getFullYear());    // 2025
-console.log(date.getHours());       // 2
-```
-
-```ts
-// 1.1.2025. `new Date` käyttää UTC-aikavyöhykettä:
-let date = new Date('2025-01-01');
-
-// USA:ssa paikallinen aika on UTC:tä jäljessä:
-process.env.TZ = 'US/Eastern';
-
-console.log(date.getDate());        // 31
-console.log(date.getFullYear());    // 2024
-console.log(date.getHours());       // 19
-
-// Tässä Date-olio, joka luotiin parametrilla "2025-01-01",
-// "muuttui" aikavyöhykkeestä johtuen päiväksi 31.12.2024.
-
-// 💡 Ilmiön havainnollistamiseksi käytetty aikavyöhykkeen
-// vaihtaminen `process.env.TZ`-muuttujan avulla ei toimi
-// kaikissa tapauksissa: https://stackoverflow.com/q/8083410
-```
-
-Yllä oleva esimerkki näyttää, miten tietty ajanhetki saattaa palauttaa odottamattomia arvoja riippuen siitä, millä aikavyöhykkeellä ohjelma suoritetaan.
-
-Luodessasi `Date`-olioita merkkijonojen perusteella, ne tulkitaan UTC-ajaksi, mikäli merkkijonossa ei esiinny kellonaikaa. Jos taas lisäät mukaan kellonajan, tulkitaan se paikalliseksi ajaksi:
-
-> *"Date-only strings (e.g. "1970-01-01") are treated as UTC, while date-time strings (e.g. "1970-01-01T12:00") are treated as local."*
->
-> https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date#date_string
-
-Voit itse päättää, luotko testeissäsi käytettävät `Date`-oliot UTC-ajalla vai käyttäen paikallista aikavyöhykettä, molemmat saattavat tässä tehtävässä toimia. Mikäli kohtaat aikavyöhykeongelmia, suosittelemme tutustumaan [Date-luokan dokumentaatioon](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date) ja keskustelemaan aiheesta Teamsissa.
-
-
-## 🚀 Date-luokan historia ja tulevaisuus
-
-Tehtävässä ilmenneet bugit johtuvat mahdollisesti joistain `Date`-luokan epäloogisuuksista, jotka ovat alalla varsin tunnettuja:
-
-> *"It is now common knowledge that in 1995 Brendan \[Eich\] was given only 10 days to write the JavaScript language and get it into Netscape. Date handling is a fundamental part of almost all programming languages, and JavaScript had to have it. That said, it’s a complex problem domain and there was a short timeline. Brendan, under orders to “make it like Java” copied the date object from the existing, infant, `java.Util.Date` date implementation. This implementation was frankly terrible. In fact, basically all of it’s methods were deprecated and replaced in the Java 1.1 release in 1997. Yet we’re still living with this API 20 years later in the JavaScript programming language."*
->
-> Maggie Pint, 2017. Fixing JavaScript Date – Getting Started. https://maggiepint.com/2017/04/09/fixing-javascript-date-getting-started/
-
-`Date`-luokan epäkohtia on tunnistettu laajasti ja ajan käsittelyn ongelmien ratkaisemiseksi on luotu [lukuisia erillisiä JS-kirjastoja](https://momentjs.com/docs/#/-project-status/recommendations/). JavaScriptin tuleviin versioihin on myös ehdotettu uutta [Temporal-oliota](https://tc39.es/proposal-temporal/docs/index.html), jonka hyväksymisprosessi on vielä kesken. `Temporal` on kokeiltavissa jo etukäteen [erillisenä npm-pakettina](https://www.npmjs.com/package/@js-temporal/polyfill).
-
+todo
 
 ## Lisenssit ja tekijänoikeudet
 
-Tämän tehtävän on kehittänyt Teemu Havulinna ja se on lisensoitu [Creative Commons BY-NC-SA -lisenssillä](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+Tämän tehtävän on kehittänyt Teemu Havulinna ja Ismo Harjunmaa ja se on lisensoitu [Creative Commons BY-NC-SA -lisenssillä](https://creativecommons.org/licenses/by-nc-sa/4.0/).
