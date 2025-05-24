@@ -4,10 +4,16 @@
 name: Node.js CI
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    push:
+      branches: [ "master" ]
+    pull_request:
+      branches: [ "master" ]
+
+permissions: 
+  checks: write
+  contents: write
+  pull-requests: write
+  issues: write
 
 jobs:
   build:
@@ -30,8 +36,6 @@ jobs:
       run: npm ci
     - name: Build TypeScript
       run: npx tsc
-    - name: Create report directory
-      run: mkdir -p reports
     - name: Run tests
       run: npm test
     - name: Publish Test Report

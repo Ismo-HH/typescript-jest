@@ -6,7 +6,7 @@ Tehtävä on kaksiosainen:
 
 1. Ensimmäisessä osassa sinun tulee kirjoittaa funktiolle yksikkötestit, joiden avulla löydät funktiossa mahdollisesti piilevät loogiset virheet.
 
-2. Toisessa osassa sinun tulee muokata annettua koodia niin, että funktio toimii toivotulla tavalla ja että kirjoittamasi testit menevät läpi. Testaamme koodisi omien testiesi lisäksi valmiilla testeillä.
+2. Toisessa osassa sinun tulee tehdä GitHub Actions työnkulku, joka luo ajoympäristön ja kääntää ohjelmakoodin, ajaa yksikkötestit ja näyttää testausraportin.
 
 
 ## Testattava ja korjattava koodi
@@ -32,8 +32,10 @@ const monthNames: readonly string[] = [
  * @returns the formatted string, in Finnish
  */
 export function finnishDateString(date: Date): string {
-    const dayName = dayNames[date.getDay() - 1];
-    const monthName = monthNames[date.getMonth() - 1];
+    const dayName = date.getDay() > 0   
+        ? dayNames[date.getDay() - 1]
+        : dayNames[6];
+    const monthName = monthNames[date.getMonth()];
 
     const day = date.getDate();
     const year = date.getFullYear();
@@ -42,7 +44,7 @@ export function finnishDateString(date: Date): string {
 }
 ```
 
-Yllä esitetty valmis koodi sisältää virheitä, joiden vuoksi muodostetut merkkijonot eivät välttämättä vastaa odotettuja. Tässä tehtävässä sinun tulee kirjoittaa yksikkötestit bugiselle funktiolle ja tehdä tarvittavat toimet funktion korjaamiseksi.
+Tässä tehtävässä sinun tulee kirjoittaa yksikkötestit funktiolle.
 
 
 ## GitHub classroom
@@ -107,7 +109,7 @@ Tehtävän ensimmäisessä osassa sinun tulee kirjoittaa yksikkötestit [`dateFo
 
 Suosittelemme kirjoittamaan testit tiedostoon [src/tests/dateFormatter.test.ts](./src/tests/dateFormatter.test.ts). Mikäli kirjoitat myös muita testitiedostoja, lisää niiden nimen päätteeksi `.test.ts` ja huolehdi, että testit ovat `src`-hakemiston alla, jotta Jest löytää ja suorittaa testisi. Voit hyödyntää testeissäsi joko [Jest:in `expect`-syntaksia](https://jestjs.io/docs/expect) tai [Node.js:n `assert`-syntaksia](https://nodejs.org/api/assert.html).
 
-**Saat tästä tehtävästä pisteet, vaikka testisi tuottavat `failed`-tuloksen**. Testiraportista on kuitenkin käytävä ilmi, että `dateFormatter.ts`-tiedosto on ainakin osittain testattu:
+**Saat tästä tehtävästä pisteet, jos testisi tuottavat `passed`-tuloksen**. Testiraportista on  käytävä ilmi, että `dateFormatter.ts`-tiedosto on 100% testattu:
 
 ```
 ------------------|---------|----------|---------|---------|-------------------
@@ -116,13 +118,25 @@ File              | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
 All files         |     100 |      100 |     100 |     100 |
  dateFormatter.ts |     100 |      100 |     100 |     100 |
 ------------------|---------|----------|---------|---------|-------------------
-Test Suites: 1 failed, 1 total
-Tests:       4 failed, 4 total
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
 ```
 
 ## Osa 2: Automatisoidun työnkulun toteuttaminen
 
-todo
+Muokkaa [.github/workflows/node.yml](.github/workflows/node.yml) -tiedoston työnkulkua niin että 
+- Koko työnkulun kestossa on yhden minuutin aikakatkaisu (timeout-minutes: 1).
+- kahden viimeistä vaiheen nimeltään _Publish Test Report_ ja _Upload test results_ aikakatkaisu on 30 sekuntia.
+- kaksi viimeistä vaihetta nimeltään _Publish Test Report_ ja _Upload test results_ suoritetaan kaikissa tilanteissa vaikka testit eivät menisikään läpi. 
+
+
+💡 * if: success() || failure() komennolla voi pakottaa raportin luonnin vaikka testit eivät menisi läpi.
+
+
+Työnkulussa käytetään kahta raportointityökalua:​
+- [dorny/test-reporter](https://github.com/marketplace/actions/test-reporter): Näyttää testitulokset GitHubin käyttöliittymässä ja tekee yhteenvedon testien onnistumisista ja epäonnistumisista. 
+- [actions/upload-artifact](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/storing-and-sharing-data-from-a-workflow): tallentaa tiedostoja tai hakemistoja työnkulun aikana niin kutsutuiksi artifakteiksi. Nämä artifaktit säilyvät työnkulun suorittamisen jälkeen ja ovat ladattavissa GitHubin käyttöliittymän tai REST API:n kautta. Tämä on erityisen hyödyllistä, kun haluat jakaa tietoja eri vaiheiden tai työnkulkujen välillä tai säilyttää esimerkiksi testituloksia, koontitiedostoja tai muita hyödyllisiä tiedostoja.​
+
 
 ## Lisenssit ja tekijänoikeudet
 
