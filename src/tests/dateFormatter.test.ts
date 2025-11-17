@@ -2,27 +2,23 @@ import { describe, expect, test } from 'vitest';
 
 import { finnishDateString } from '../dateFormatter';
 
+const january1 = new Date('2024-01-01T00:00:00Z');
+const february1 = new Date('2024-02-01T00:00:00Z');
+const december31 = new Date('2023-12-31T00:00:00Z');
+const tammikuu2030 = new Date('2030-01-15T12:00:00.000Z');
 
-describe('Finnish date string formatter', () => {
+test('Tammikuun ensimmäinen', () => {
+    expect.fail('no tests written for maanantai 1. tammikuuta 2024');
+});
 
-    test('January 1st 2030 is Tuesday', () => {
-        const jan_1_2030 = new Date('2030-01-01T12:00:00.000Z');
-        let result = finnishDateString(jan_1_2030);
+test('Helmikuun ensimmäinen', () => {
+    expect.fail('no tests written for torstai 1. helmikuuta 2024');
+});
 
-        expect(result).toEqual('tiistai 1. tammikuuta 2030');
-    });
+test('Joulukuun viimeinen', () => {
+    expect.fail('no tests written for sunnuntai 31. joulukuuta 2023');
+});
 
-    test('February 1st 2030 is Friday', () => {
-        const feb_1_2030 = new Date('2030-02-01T12:00:00.000Z');
-        let result = finnishDateString(feb_1_2030);
-
-        expect(result).toEqual('perjantai 1. helmikuuta 2030');
-    });
-
-    test('December 1st 2030 is Sunday', () => {
-        const dec_1_2030 = new Date('2030-12-01T12:00:00.000Z');
-        let result = finnishDateString(dec_1_2030);
-
-        expect(result).toEqual('sunnuntai 1. joulukuuta 2030');
-    });
+test('Tammikuun 15. päivä 2030', () => {
+    expect.fail('no tests written for tiistai 15. tammikuuta 2030');
 });
