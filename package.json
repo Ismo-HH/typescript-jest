@@ -1,12 +1,11 @@
 {
   "scripts": {
-    "test": "jest --verbose --coverage"
+    "test": "vitest run --coverage --reporter=default --reporter=html"
   },
   "devDependencies": {
-    "@types/jest": "29",
-    "jest-junit": "^16.0.0",
-    "ts-jest": "29",
-    "ts-node": "10",
-    "typescript": "5"
-  }
+    "vitest": "^4.0.9",
+    "@vitest/coverage-v8": "^4.0.10",
+    "@vitest/ui": "^4.0.10"
+  },
+  "type": "module"
 }
