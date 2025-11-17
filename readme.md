@@ -81,7 +81,7 @@ npm test
 
 Taustalla `npm` suorittaa `test`-nimisen skriptin, joka on määritetty [`package.json`-tiedostossa](./package.json) seuraavasti:
 
-```json
+```js
 {
     "scripts": {
         "test": "vitest run --coverage --reporter=default --reporter=html"
