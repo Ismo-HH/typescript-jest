@@ -1,30 +1,28 @@
-import { test, describe, expect } from '@jest/globals'; // https://jestjs.io/docs/expect
-import { strict as assert } from 'node:assert';         // https://nodejs.org/api/assert.html
+import { describe, expect, test } from 'vitest';
 
-import { finnishDateString } from '../dateFormatter';   // the function to be tested
+import { finnishDateString } from '../dateFormatter';
 
 
-const january1 = new Date('2024-01-01T00:00:00Z');
-const february1 = new Date('2024-02-01T00:00:00Z');
-const december31 = new Date('2023-12-31T00:00:00Z');
-const tammikuu2030 = new Date('2030-01-15T12:00:00.000Z');
+describe('Finnish date string formatter', () => {
 
-test('Tammikuun ensimmäinen', () => {
-    let result = finnishDateString(january1);
-    assert.equal(result.toLowerCase(), 'maanantai 1. tammikuuta 2024');
-});
+    test('January 1st 2030 is Tuesday', () => {
+        const jan_1_2030 = new Date('2030-01-01T12:00:00.000Z');
+        let result = finnishDateString(jan_1_2030);
 
-test('Helmikuun ensimmäinen', () => {
-    let result = finnishDateString(february1);
-    assert.equal(result.toLowerCase(), 'torstai 1. helmikuuta 2024');
-});
+        expect(result).toEqual('tiistai 1. tammikuuta 2030');
+    });
 
-test('Joulukuun viimeinen', () => {
-    let result = finnishDateString(december31);
-    assert.equal(result.toLowerCase(), 'sunnuntai 31. joulukuuta 2023');
-});
+    test('February 1st 2030 is Friday', () => {
+        const feb_1_2030 = new Date('2030-02-01T12:00:00.000Z');
+        let result = finnishDateString(feb_1_2030);
 
-test('Tammikuun 15. päivä 2030', () => {
-    let result = finnishDateString(tammikuu2030);
-    assert.equal(result.toLowerCase(), 'tiistai 15. tammikuuta 2030');
+        expect(result).toEqual('perjantai 1. helmikuuta 2030');
+    });
+
+    test('December 1st 2030 is Sunday', () => {
+        const dec_1_2030 = new Date('2030-12-01T12:00:00.000Z');
+        let result = finnishDateString(dec_1_2030);
+
+        expect(result).toEqual('sunnuntai 1. joulukuuta 2030');
+    });
 });

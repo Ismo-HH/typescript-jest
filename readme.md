@@ -1,6 +1,6 @@
-# Yksikkötestaus Jest-työkalulla
+# Yksikkötestaus ja GitHub Actions
 
-Tässä tehtävässä harjoitellaan yksikkötestausta [Jest-työkalulla](https://jestjs.io/) Node.js-ympäristössä. Tehtävänäsi on kirjoittaa yksikkötestit valmiiksi annetulle [`finnishDateString`-funktiolle](./src/dateFormatter.ts), joka muotoilee sille annetun `Date`-olion suomenkieliseksi merkkijonoksi.
+Tässä tehtävässä harjoitellaan yksikkötestausta [Vitest-työkalulla](https://vitest.dev/) Node.js-ympäristössä. Tehtävänäsi on kirjoittaa yksikkötestit valmiiksi annetulle [`finnishDateString`-funktiolle](./src/dateFormatter.ts), joka muotoilee sille annetun `Date`-olion suomenkieliseksi merkkijonoksi.
 
 Tehtävä on kaksiosainen:
 
@@ -51,8 +51,6 @@ Tässä tehtävässä sinun tulee kirjoittaa yksikkötestit funktiolle.
 
 Tehtävä arvostellaan käyttäen [GitHub classroom](https://classroom.github.com/) -palvelua, joka suorittaa ohjelmasi ja tarkastaa sekä pisteyttää tulokset automaattisesti. Kun olet hyväksynyt tehtävän GitHub classroomissa ja saanut repositoriosta henkilökohtaisen kopion, kloonaa se itsellesi `git clone` -komennolla. Siirry sen jälkeen VS Codeen editoimaan tiedostoja.
 
-Kloonatessasi repositoriota **varmista, että Git-osoitteen lopussa on oma GitHub-käyttäjänimesi**. Jos käyttäjänimesi puuttuu osoitteesta, kyseessä ei ole henkilökohtainen kopiosi tehtävästä. Luo tässä tapauksessa oma classroom-kopio tehtävästä itsellesi Teams-tehtävästä löytyvän linkin avulla.
-
 Voit tarvittaessa lähettää tehtävän tarkastettavaksi monta kertaa. Tee tällöin uusi commit ja vie (push) muutokset GitHubiin. Varmista kuitenkin, että viimeisin tekemäsi commit tuottaa parhaat pisteet.
 
 💡 *Automaattisen arvioinnin vuoksi et saa muuttaa `dateFormatter.ts`-tiedoston etkä sieltä julkaistavan `finnishDateString`-funktion nimeä tai parametreja.*
@@ -60,66 +58,64 @@ Voit tarvittaessa lähettää tehtävän tarkastettavaksi monta kertaa. Tee täl
 
 ## Riippuvuuksien asentaminen
 
-Aloita asentamalla projektin riippuvuudet, jotka on määritelty `package.json`-tiedostossa:
+Aloita asentamalla projektin riippuvuudet, jotka on määritelty [`package.json`-tiedostossa](./package.json):
 
 ```sh
-$ npm install
+npm install
 ```
 
-Riippuvuudet sisältävät sekä [TypeScript-kielen](https://www.npmjs.com/package/typescript), [Jest-testaustyökalun](https://www.npmjs.com/package/jest) että [`ts-node`](https://www.npmjs.com/package/ts-node)- ja [`ts-jest`](https://www.npmjs.com/package/ts-jest)-paketit TypeScript-kielisen koodin ja testien suorittamiseksi Node.js:llä. Node.js sinulta tulee löytyä valmiina.
+Projektin riippuvuudet ovat: 
 
-
-## Ohjelman suorittaminen
-
-Tässä tehtävässä tarkoituksena on harjoitella yksikkötestausta, eli testata yksittäistä ohjelman osaa erillään muusta mahdollisesta koodista. Tehtävässä ei siis ole lainkaan käyttöliittymää, jonka kautta voisit kokeilla funktion toimintaa manuaalisesti.
-
-Oman "pääohjelman" kirjoittaminen `finnishDateString`-funktion kokeilemiseksi ei ole kiellettyä, mutta kannustamme vahvasti keskittymään funktion yksikkötestaukseen ja jättämään mahdolliset muut skriptit kirjoittamatta.
+* `vitest` vitest-testityökalu
+* `@vitest/coverage-v8` lisäosa koodikattavuusraportointiin
+* `@vitest/ui` lisäosa mm. HTML-raportin generointiin
 
 
 ## Testien suorittaminen
 
-Tehtävän yksikkötestit suoritetaan [Jest-testityökalun](https://jestjs.io/) avulla komennolla `npm test`:
+Tässä tehtävässä tarkoituksena on harjoitella yksikkötestausta, eli testata yksittäistä ohjelman osaa erillään muusta mahdollisesta koodista. Tehtävässä ei siis ole lainkaan käyttöliittymää, jonka kautta voisit kokeilla funktion toimintaa manuaalisesti. Sen sijaan voit tarkastella funktion toimintaa yksikkötestien avulla:
 
 ```sh
-$ npm test
+npm test
 ```
 
-Taustalla `npm` suorittaa `test`-nimisen skriptin, joka on määritetty `package.json`-tiedostossa seuraavasti:
+Taustalla `npm` suorittaa `test`-nimisen skriptin, joka on määritetty [`package.json`-tiedostossa](./package.json) seuraavasti:
 
-```json
+```js
 {
     "scripts": {
-        "test": "jest --verbose --coverage"
-    }
+        "test": "vitest run --coverage --reporter=default --reporter=html"
+    },
+    // ...
 }
 ```
 
-Yllä [Jest-komennolle](https://jestjs.io/docs/cli) annetaan kaksi parametria, joiden merkitykset ovat seuraavat:
+Yllä [Vitest-komennolle](https://vitest.dev/guide/cli.html) annetaan parametreja, joiden merkitykset ovat seuraavat:
 
-* `--verbose` *"Display individual test results with the test suite hierarchy."* ([jestjs.io](https://jestjs.io/docs/cli))
+* `run` *"Perform a single run without watch mode."* ([vitest.dev](https://vitest.dev/guide/cli.html))
 
-* `--coverage` *"Indicates that test coverage information should be collected and reported in the output."* ([jestjs.io](https://jestjs.io/docs/cli))
+* `--coverage` https://vitest.dev/config/coverage.html
 
-💡 *Älä muuta testien käynnistyskomentoa. Mikäli testit eivät mene läpi, kiinnitä erityisesti huomiota saamasi virheraportin **Message**-kohtiin.*
+* `--reporter=default` https://vitest.dev/guide/reporters.html#default-reporter
+
+* `--reporter=default` https://vitest.dev/guide/reporters.html#html-reporter
 
 
 ## Osa 1: Omien testien kirjoittaminen
 
 Tehtävän ensimmäisessä osassa sinun tulee kirjoittaa yksikkötestit [`dateFormatter.ts`-tiedostossa](./src/dateFormatter.ts) sijaitsevalle `finnishDateString`-funktiolle. Funktion on tarkoitus muotoilla sille annettu `Date`-olion suomenkieliseksi merkkijonoksi ja palauttaa esimerkiksi teksti `'maanantai 1. tammikuuta 2024'`.
 
-Suosittelemme kirjoittamaan testit tiedostoon [src/tests/dateFormatter.test.ts](./src/tests/dateFormatter.test.ts). Mikäli kirjoitat myös muita testitiedostoja, lisää niiden nimen päätteeksi `.test.ts` ja huolehdi, että testit ovat `src`-hakemiston alla, jotta Jest löytää ja suorittaa testisi. Voit hyödyntää testeissäsi joko [Jest:in `expect`-syntaksia](https://jestjs.io/docs/expect) tai [Node.js:n `assert`-syntaksia](https://nodejs.org/api/assert.html).
+Suosittelemme kirjoittamaan testit tiedostoon [src/tests/dateFormatter.test.ts](./src/tests/dateFormatter.test.ts). Mikäli kirjoitat myös muita testitiedostoja, lisää niiden nimen päätteeksi `.test.ts` ja huolehdi, että testit ovat `src`-hakemiston alla, jotta Vitest löytää ja suorittaa testisi. Voit hyödyntää testeissäsi [Vitest:in `expect`-syntaksia](https://vitest.dev/api/expect.html) tai [Node.js:n `assert`-syntaksia](https://nodejs.org/api/assert.html).
 
 **Saat tästä tehtävästä pisteet, jos testisi tuottavat `passed`-tuloksen**. Testiraportista on  käytävä ilmi, että `dateFormatter.ts`-tiedosto on 100% testattu:
 
 ```
 ------------------|---------|----------|---------|---------|-------------------
-File              | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+File              | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
 ------------------|---------|----------|---------|---------|-------------------
-All files         |     100 |      100 |     100 |     100 |
- dateFormatter.ts |     100 |      100 |     100 |     100 |
+All files         |     100 |      100 |     100 |     100 |                   
+ dateFormatter.ts |     100 |      100 |     100 |     100 |                   
 ------------------|---------|----------|---------|---------|-------------------
-Test Suites: 1 passed, 1 total
-Tests:       4 passed, 4 total
 ```
 
 ## Osa 2: Automatisoidun työnkulun toteuttaminen
@@ -133,9 +129,12 @@ Muokkaa [.github/workflows/node.yml](.github/workflows/node.yml) -tiedoston työ
 💡 * if: success() || failure() komennolla voi pakottaa raportin luonnin vaikka testit eivät menisi läpi.
 
 
-Työnkulussa käytetään kahta raportointityökalua:​
-- [dorny/test-reporter](https://github.com/marketplace/actions/test-reporter): Näyttää testitulokset GitHubin käyttöliittymässä ja tekee yhteenvedon testien onnistumisista ja epäonnistumisista. 
-- [actions/upload-artifact](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/storing-and-sharing-data-from-a-workflow): tallentaa tiedostoja tai hakemistoja työnkulun aikana niin kutsutuiksi artifakteiksi. Nämä artifaktit säilyvät työnkulun suorittamisen jälkeen ja ovat ladattavissa GitHubin käyttöliittymän tai REST API:n kautta. Tämä on erityisen hyödyllistä, kun haluat jakaa tietoja eri vaiheiden tai työnkulkujen välillä tai säilyttää esimerkiksi testituloksia, koontitiedostoja tai muita hyödyllisiä tiedostoja.​
+Lisäksi hyödynnä [actions/upload-artifact](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/storing-and-sharing-data-from-a-workflow) -työnkulkua ja Viten generoimat testiraportit HTML-muotoisina:
+
+* `coverage`-hakemisto sisältää koodikattavuusraportin HTML-muodossa.
+* `html`-hakemisto sisältää Vitestin generoiman testiraportin HTML-muodossa.
+
+Nämä artifaktit säilyvät työnkulun suorittamisen jälkeen ja ovat ladattavissa GitHubin käyttöliittymän tai REST API:n kautta. Tämä on erityisen hyödyllistä, kun haluat jakaa tietoja eri vaiheiden tai työnkulkujen välillä tai säilyttää esimerkiksi testituloksia, koontitiedostoja tai muita hyödyllisiä tiedostoja.​
 
 
 ## Lisenssit ja tekijänoikeudet
