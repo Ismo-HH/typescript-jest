@@ -123,10 +123,11 @@ All files         |     100 |      100 |     100 |     100 |
 Muokkaa [.github/workflows/node.yml](.github/workflows/node.yml) -tiedoston työnkulkua niin että 
 - Koko työnkulun kestossa on yhden minuutin aikakatkaisu (timeout-minutes: 1).
 - kahden viimeistä vaiheen nimeltään _Publish Test Report_ ja _Upload test results_ aikakatkaisu on 30 sekuntia.
-- kaksi viimeistä vaihetta nimeltään _Publish Test Report_ ja _Upload test results_ suoritetaan kaikissa tilanteissa vaikka testit eivät menisikään läpi. 
+- kaksi viimeistä vaihetta nimeltään _Publish Test Report_ ja _Upload test results_ suoritetaan kaikissa tilanteissa vaikka testit eivät menisikään läpi.
+-  _Upload test results_ vaiheessa raportoinnin sisältävä `html`-hakemisto  nimetään node-version mukaan ja tallennetaan GitHub Actionsin väliaikaiseen repositoriokohtaiseen tallennuspaikkaan
 
 
-💡 * if: success() || failure() komennolla voi pakottaa raportin luonnin vaikka testit eivät menisi läpi.
+💡 if: success() || failure() komennolla voi pakottaa raportin luonnin vaikka testit eivät menisi läpi.
 
 
 Lisäksi hyödynnä [actions/upload-artifact](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/storing-and-sharing-data-from-a-workflow) -työnkulkua ja Viten generoimat testiraportit HTML-muotoisina:
